@@ -9,21 +9,21 @@ https://demo.invoiceshelf.com/start-demo
 
 ## Features
 
--   Quickly create a demo for your project.
--   Spin up a docker stack when requested, shut down the stack when time is up.
--   A countdown timer at the bottom right corner.
--   Custom demo duration.
--   Portless demo instances design, you just need one port for Demo Shelf.
+- Quickly create a demo for your project.
+- Spin up a docker stack when requested, shut down the stack when time is up.
+- A countdown timer at the bottom right corner.
+- Custom demo duration.
+- Portless demo instances design, you just need one port for Demo Shelf.
 
 ## How to use
 
 1. Create a stack directory `demo-shelf`.
 1. Download `compose.yaml` and `compose-demo.yaml` into the directory.
-    - `compose.yaml` = Demo Shelf stack
-        - You should go through all variables in the `environment:` section.
-    - `compose-demo.yaml` = The stack that you want to provide a demo
-        - By default, the main service should be `main` and the network name should be `demo-shelf_default`.
-        - If your stack name is not `demo-shelf`, you should change the network name to `{your-name}_default`
+   - `compose.yaml` = Demo Shelf stack
+     - You should go through all variables in the `environment:` section.
+   - `compose-demo.yaml` = The stack that you want to provide a demo
+     - By default, the main service should be `main` and the network name should be `demo-shelf_default`.
+     - If your stack name is not `demo-shelf`, you should change the network name to `{your-name}_default`
 1. `docker compose up -d`.
 1. Go to http://localhost:3003/start-demo to test the demo.
 
