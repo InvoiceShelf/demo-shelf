@@ -1,160 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <title><%= websiteName %></title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" type="text/css" href="/demo-shelf/main.css" />
+  <title>
+    <%= websiteName %>
+  </title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" type="text/css" href="/demo-shelf/main.css" />
 </head>
+
 <body>
 
-<div id="app" v-cloak>
+  <div id="app" v-cloak>
 
     <div class="main" v-if="!iframeSrc">
-        <div class="entry"  v-if="showEntry">
-            <h2><%= websiteName %></h2>
-            <p class="mt-4">
-                This is a demo of <%= websiteName %>. You can use this demo to try out the software before installing it on your own server.
-            </p>
-            <button class="btn btn-primary btn-big" @click="start">Start Demo</button>
-        </div>
+      <div class="entry" v-if="showEntry">
+        <h2>
+          <%= websiteName %>
+        </h2>
+        <p class="mt-4">
+          This is a demo of <%= websiteName %>. You can use this demo to try out the software before
+            installing it on your own server.
+        </p>
+        <button class="btn btn-primary btn-big" @click="start">Start Demo</button>
+      </div>
 
-        <div v-if="showEnd">
-            <h2>Demo has Ended</h2>
-            <p class="mt-4">
-                Your demo has ended, you can start a new demo by refreshing the page.
-            </p>
-            <a href="<%= installURL %>" class="btn btn-primary">Install now</a>
-        </div>
+      <div v-if="showEnd">
+        <h2>Demo has Ended</h2>
+        <p class="mt-4">
+          Your demo has ended, you can start a new demo by refreshing the page.
+        </p>
+        <a href="<%= installURL %>" class="btn btn-primary">Install now</a>
+      </div>
 
-        <div class="loading" v-if="loading">
-            Preparing your demo, please wait...
-        </div>
+      <div class="loading" v-if="loading">
+        Preparing your demo, please wait...
+      </div>
 
     </div>
 
     <div class="fixed" v-if="showFixed">
-        {{ countdown }} <a href="<%= installURL %>" target="_blank">Install now</a>
+      {{ countdown }} <a href="<%= installURL %>" target="_blank">Install now</a>
     </div>
 
     <iframe :src="iframeSrc" v-if="iframeSrc"></iframe>
-</div>
+  </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.2/vue.global.prod.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.2/vue.global.prod.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
     const autoStart = <%- JSON.stringify(autoStart) %>;
     let entryPath = <%- JSON.stringify(entryPath) %>;
     let timer;
 
-    const { createApp } = Vue;
+    const {
+      createApp
+    } = Vue;
     createApp({
-        data() {
-            return {
-                showEntry: false,
-                loading: false,
-                iframeSrc: "",
-                countdown: "00:00",
-                showFixed: false,
-                showEnd: false,
-            }
-        },
-        computed: {
-
-        },
-        async mounted() {
-            console.info("Mounted");
-
-            // If session-id cookie is set, we can skip the entry screen
-            if (document.cookie.indexOf("session-id") !== -1) {
-                // Check if the session-id is still valid
-                try {
-                    let res = await fetch("/demo-shelf/validate-session");
-                    let obj = await res.json();
-                    if (obj.ok) {
-                        this.showEntry = false;
-                        this.iframeSrc = entryPath;
-                        this.startTimer();
-                    } else {
-                        this.entryAction();
-                    }
-                } catch (e) {
-                    this.entryAction();
-                }
-            } else {
-                this.entryAction();
-            }
-        },
-        methods: {
-            entryAction() {
-                if (autoStart) {
-                    this.start();
-                } else {
-                    this.showEntry = true;
-                }
-            },
-
-            async start() {
-                this.showEntry = false;
-                this.loading = true;
-
-                try {
-                    let res = await fetch("/demo-shelf/start-instance");
-                    let obj = await res.json();
-
-                    if (res.status === 200 && obj.ok) {
-                        this.loading = false;
-                        this.iframeSrc = entryPath;
-
-                        localStorage.setItem("endSessionTime", obj.endSessionTime);
-                        this.startTimer();
-
-                    } else {
-                        this.loading = false;
-                        alert("Error starting demo, please try again later.");
-                        this.showEntry = true;
-                    }
-                } catch (e) {
-                    this.loading = false;
-                    alert("Error starting demo, please try again later.");
-                    this.showEntry = true;
-                }
-
-            },
-
-            startTimer() {
-                if (timer) {
-                    return;
-                }
-
-                this.showFixed = true;
-                let endSessionTime = localStorage.getItem("endSessionTime");
-
-
-                timer = setInterval(() => {
-                    let now = Date.now();
-                    let distance = endSessionTime - now;
-
-                    console.log(distance)
-
-                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)) + "";
-                    let seconds = Math.floor((distance % (1000 * 60)) / 1000) + "";
-
-                    this.countdown = minutes.padStart(2, "0") + ":" + seconds.padStart(2, "0");
-
-                    if (distance <= 0) {
-                        clearInterval(timer);
-                        this.countdown = "00:00";
-                        this.iframeSrc = "";
-                        this.showEnd = true;
-                        this.showFixed = false;
-                    }
-                }, 1000);
-            },
+      data() {
+        return {
+          showEntry: false,
+          loading: false,
+          iframeSrc: "",
+          countdown: "00:00",
+          showFixed: false,
+          showEnd: false,
         }
+      },
+      computed: {
+
+      },
+      async mounted() {
+        console.info("Mounted");
+
+        // If session-id cookie is set, we can skip the entry screen
+        if (document.cookie.indexOf("session-id") !== -1) {
+          // Check if the session-id is still valid
+          try {
+            let res = await fetch("/demo-shelf/validate-session");
+            let obj = await res.json();
+            if (obj.ok) {
+              this.showEntry = false;
+              this.iframeSrc = entryPath;
+              this.startTimer();
+            } else {
+              this.entryAction();
+            }
+          } catch (e) {
+            this.entryAction();
+          }
+        } else {
+          this.entryAction();
+        }
+      },
+      methods: {
+        entryAction() {
+          if (autoStart) {
+            this.start();
+          } else {
+            this.showEntry = true;
+          }
+        },
+
+        async start() {
+          this.showEntry = false;
+          this.loading = true;
+
+          try {
+            let res = await fetch("/demo-shelf/start-instance");
+            let obj = await res.json();
+
+            if (res.status === 200 && obj.ok) {
+              this.loading = false;
+              this.iframeSrc = entryPath;
+
+              localStorage.setItem("endSessionTime", obj.endSessionTime);
+              this.startTimer();
+
+            } else {
+              this.loading = false;
+              alert("Error starting demo, please try again later.");
+              this.showEntry = true;
+            }
+          } catch (e) {
+            this.loading = false;
+            alert("Error starting demo, please try again later.");
+            this.showEntry = true;
+          }
+
+        },
+
+        startTimer() {
+          if (timer) {
+            return;
+          }
+
+          this.showFixed = true;
+          let endSessionTime = localStorage.getItem("endSessionTime");
+
+
+          timer = setInterval(() => {
+            let now = Date.now();
+            let distance = endSessionTime - now;
+
+            console.log(distance)
+
+            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)) + "";
+            let seconds = Math.floor((distance % (1000 * 60)) / 1000) + "";
+
+            this.countdown = minutes.padStart(2, "0") + ":" + seconds.padStart(2, "0");
+
+            if (distance <= 0) {
+              clearInterval(timer);
+              this.countdown = "00:00";
+              this.iframeSrc = "";
+              this.showEnd = true;
+              this.showFixed = false;
+            }
+          }, 1000);
+        },
+      }
     }).mount('#app');
-</script>
+  </script>
 
 </body>
+
 </html>
