@@ -92,9 +92,8 @@ async function requestHandler(req : http.IncomingMessage, res : http.ServerRespo
             entryPath,
         });
         res.end(indexTemplate);
-
-    } else if (req.url.startsWith("/demo-kuma/")) {
-        if (req.url === "/demo" || req.url === "/demo-kuma/") {
+    } else if (req.url.startsWith("/demo-shelf/")) {
+        if (req.url === "/demo" || req.url === "/demo-shelf/") {
             res.writeHead(200, { "Content-Type": "text/html" });
             let indexTemplate = ejs.render(await fs.readFile("./views/index.ejs", "utf-8"), {
                 websiteName,
@@ -103,8 +102,7 @@ async function requestHandler(req : http.IncomingMessage, res : http.ServerRespo
                 entryPath,
             });
             res.end(indexTemplate);
-
-        } else if (req.url === "/demo-kuma/start-instance") {
+        } else if (req.url === "/demo-shelf/start-instance") {
             try {
                 let { endSessionTime, sessionID } = await pool.startInstance();
                 res.writeHead(200, {
@@ -123,8 +121,7 @@ async function requestHandler(req : http.IncomingMessage, res : http.ServerRespo
                     ok: false,
                 }));
             }
-
-        } else if (req.url === "/demo-kuma/validate-session") {
+        } else if (req.url === "/demo-shelf/validate-session") {
             let sessionID = getSessionID(req);
 
             res.writeHead(200, {
