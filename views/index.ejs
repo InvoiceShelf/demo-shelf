@@ -7,8 +7,6 @@
   </title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" type="text/css" href="/demo-shelf/main.css" />
 </head>
 
@@ -17,33 +15,51 @@
   <div id="app" v-cloak>
 
     <div class="main" v-if="!iframeSrc">
-      <div class="entry" v-if="showEntry">
-        <h2>
-          <%= websiteName %>
-        </h2>
-        <p class="mt-4">
-          This is a demo of <%= websiteName %>. You can use this demo to try out the software before
-            installing it on your own server.
-        </p>
-        <button class="btn btn-primary btn-big" @click="start">Start Demo</button>
+      <div class="entry card" v-if="showEntry">
+        <div class="bg">
+
+          <h2 class="heading">
+            <%= websiteName %>
+          </h2>
+
+          <p class="paragraph">
+            This is a demo of <%= websiteName %>. You can use this demo to try out the software before
+              installing it on your own server.
+          </p>
+
+          <button class="btn btn-primary btn-big" @click="start">Start Demo</button>
+        </div>
       </div>
 
-      <div v-if="showEnd">
-        <h2>Demo has Ended</h2>
-        <p class="mt-4">
-          Your demo has ended, you can start a new demo by refreshing the page.
-        </p>
-        <a href="<%= installURL %>" class="btn btn-primary">Install now</a>
+      <div class="entry card blue-glow" v-if="loading">
+        <div class="bg">
+          <p class="paragraph">
+            Preparing your demo, please wait...
+          </p>
+        </div>
       </div>
 
-      <div class="loading" v-if="loading">
-        Preparing your demo, please wait...
+      <div class="entry card blue-glow" v-if="showEnd">
+        <div class="bg">
+
+          <h2 class="heading">
+            <%= websiteName %> has Ended
+          </h2>
+
+          <p class="paragraph">
+            <%= websiteName %> has ended, you can start a new demo by refreshing the page. Better still, why not Install it and use it!
+          </p>
+
+          <a href="<%= installURL %>" class="btn eager btn-primary">Install now</a>
+        </div>
       </div>
 
     </div>
 
     <div class="fixed" v-if="showFixed">
-      {{ countdown }} <a href="<%= installURL %>" target="_blank">Install now</a>
+      <div class="fixed-inner">
+        <p><span class="countdown">{{ countdown }}</span> <a href="<%= installURL %>" class="install-link" target="_blank">Install now</a></p>
+      </div>
     </div>
 
     <iframe :src="iframeSrc" v-if="iframeSrc"></iframe>
