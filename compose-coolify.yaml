@@ -1,0 +1,43 @@
+services:
+  demo-shelf:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./compose-demo.yaml:/app/compose-demo.yaml
+    environment:
+      - SERVICE_FQDN_DEMO_SHELF_3003
+
+      # Demo Website Name
+      - WEBSITE_NAME=InvoiceShelf Demo
+
+      # Stack Prefix (Should a special prefix, because demo-shelf will manage (start/shutdown) all stacks with this)
+      - STACK_PREFIX=invoiceshelf-demo
+
+      # Specify the service name of the stack
+      - STACK_MAIN_SERVICE_NAME=main
+
+      # Specify the port of the service
+      - STACK_MAIN_SERVICE_PORT=80
+
+      # The entry path of the demo
+      # Should be start with /
+      - STACK_MAIN_SERVICE_ENTRY_PATH=/
+
+      # Session Time (Seconds)
+      - SESSION_TIME=600
+
+      # If the stack has not started in time, it will be considered as failed (Seconds)
+      - START_TIMEOUT=60
+
+      # Show Entry
+      # If true, the entry will be shown in the demo page and the user has to click "Start Demo" to start the demo
+      # true / false
+      - SHOW_ENTRY=true
+
+      # Install URL for the "Install now" button
+      - INSTALL_URL=https://invoiceshelf.com/
+
+      # Docker Network Name
+      # The demo instance must be in the same network as the demo-shelf
+      - DOCKER_NETWORK_NAME=demo-shelf_default
