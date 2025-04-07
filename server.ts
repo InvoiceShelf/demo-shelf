@@ -101,6 +101,7 @@ async function requestHandler(
         installURL,
         autoStart: !showEntry,
         entryPath,
+        sessionTime,
       }
     );
     res.end(indexTemplate);
@@ -114,6 +115,7 @@ async function requestHandler(
           installURL,
           autoStart: !showEntry,
           entryPath,
+          sessionTime,
         }
       );
       res.end(indexTemplate);

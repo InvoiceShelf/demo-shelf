@@ -59,6 +59,40 @@
       </div>
 
       <iframe :src="iframeSrc" v-if="iframeSrc"></iframe>
+
+      <div class="popup-overlay" v-if="showPopup && iframeSrc">
+        <div class="entry card blue-glow">
+          <div class="bg">
+            <h2 class="heading">How to setup your demo</h2>
+
+            <p class="paragraph left">
+              Currently, the demo
+              <u>cannot automatically set up the database</u>, but do not worry;
+              it is very straightforward.
+            </p>
+
+            <p class="paragraph left">
+              All you need to do is select "SQLite" from the dropdown menu when
+              prompted about which database to use, and keep all the default
+              settings. That's all there is to it!
+            </p>
+
+            <p class="paragraph joke left">
+              Alright then, upstairs, my little nose miners! Go! Flee before me!
+              Onward and upward. Go pump some neurons! Expand your craniums!<br />
+            </p>
+
+            <p class="paragraph joke right">- Euphegenia Doubtfire</p>
+
+            <button
+              class="popup-close btn btn-primary blue"
+              @click="closePopup"
+            >
+              Understood
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.2/vue.global.prod.min.js"></script>
@@ -68,6 +102,7 @@
       referrerpolicy="no-referrer"
     ></script>
     <script>
+      const sessionTime = <%= sessionTime %>;
       const autoStart = <%- JSON.stringify(autoStart) %>;
       let entryPath = <%- JSON.stringify(entryPath) %>;
       let timer;
@@ -84,6 +119,7 @@
             countdown: "00:00",
             showFixed: false,
             showEnd: false,
+            showPopup: false,
           }
         },
         computed: {
@@ -110,6 +146,12 @@
             }
           } else {
             this.entryAction();
+          }
+
+          // Show popup if not shown in the last 10 minutes
+          const lastPopupTime = localStorage.getItem('lastPopupTime');
+          if (!lastPopupTime || Date.now() - lastPopupTime > sessionTime * 1000) {
+            this.showPopup = true;
           }
         },
         methods: {
@@ -178,6 +220,11 @@
               }
             }, 1000);
           },
+
+          closePopup() {
+            this.showPopup = false;
+            localStorage.setItem('lastPopupTime', Date.now());
+          }
         }
       }).mount('#app');
     </script>
