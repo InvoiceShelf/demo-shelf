@@ -1,44 +1,62 @@
 # Demo Shelf
 
-Create a demo site for your Docker based web application.
+![Repo Banner](/static/banner.png)
 
-Live Demo (invoiceShelf):
-https://demo.invoiceshelf.com/start-demo
+Create a demo site for your Docker-based web application.
 
-![image](https://github.com/louislam/demo-kuma/assets/1336778/f15b5e46-5c98-419e-98e4-a2d52b91780c)
+[Live Demo](https://demo.invoiceshelf.com/start-demo)
+
+## Table of Contents
+
+<!-- TOC -->
+
+- [Demo Shelf](#demo-shelf)
+  - [Table of Contents](#table-of-contents)
+  - [Special Shoutout](#special-shoutout)
+  - [Features](#features)
+  - [How to Use](#how-to-use)
+  - [How It Works](#how-it-works)
+  - [More Screenshots](#more-screenshots)
+
+<!-- /TOC -->
+
+## Special Shoutout
+
+A big shout out to [@louislam](https://github.com/louislam/), the original creator of [demo-kuma](https://github.com/louislam/demo-kuma), for developing this amazing tool. Go give him a ⭐; he deserves it!
 
 ## Features
 
 - Quickly create a demo for your project.
-- Spin up a docker stack when requested, shut down the stack when time is up.
-- A countdown timer at the bottom right corner.
-- Custom demo duration.
-- Portless demo instances design, you just need one port for Demo Shelf.
+- Automated deployment of the Docker application stack upon HTTP request.
+- Automatic shutdown of the stack when the time is up.
+- Countdown timer displayed in the bottom right corner.
+- Customisable demo duration.
+- Single port operation.
 
-## How to use
+## How to Use
 
-1. Create a stack directory `demo-shelf`.
-1. Download `compose.yaml` and `compose-demo.yaml` into the directory.
-   - `compose.yaml` = Demo Shelf stack
-     - You should go through all variables in the `environment:` section.
-   - `compose-demo.yaml` = The stack that you want to provide a demo
-     - By default, the main service should be `main` and the network name should be `demo-shelf_default`.
-     - If your stack name is not `demo-shelf`, you should change the network name to `{your-name}_default`
-1. `docker compose up -d`.
-1. Go to http://localhost:3003/start-demo to test the demo.
+1. Create a stack directory named `demo-shelf` (IMPORTANT: Docker uses this for the network name, and this application relies on it).
+2. Download `compose.yaml` and `compose-demo.yaml` into the directory.
+   - `compose.yaml`: This file defines the Demo Shelf stack.
+     - Review all variables in the `environment:` section.
+   - `compose-demo.yaml`: This file defines your demo stack.
+     - By default, the main service should be named `main`, and the network name should be `demo-shelf_default`.
+     - If your repository or root folder name is not `demo-shelf`, change the network name to `{your-repo/root-folder-name}_default`.
+3. Run the command `docker compose up -d`.
+4. (Optional) If you are in development mode, navigate to http://localhost:3003/start-demo to test the demo.
 
-## How it works?
+## How It Works
 
-1. Demo Shelf takes control of your Docker
-1. User requests a demo via a browser
-1. Demo Shelf assign a session ID for this request and spin up the stack `compose-demo.yaml`
-1. Once the demo stack is started, Demo Shelf will act as a reverse proxy to communicate between the browser and the demo stack.
-1. The timer will be created at the same time. When time is up, Demo Shelf will shut down the stack.
+1. Demo Shelf takes control of your Docker environment, so ensure you run this in an isolated virtual machine or on a dedicated server.
+2. The user sends an HTTP request via a browser to initialise the demo.
+3. Demo Shelf assigns a session ID for this request and spins up the stack defined in `compose-demo.yaml`.
+4. Once the demo stack is started, Demo Shelf acts as a reverse proxy to facilitate communication between the browser and the individual demo stack. This is why we set the `demo-shelf_default` network to `external` in the demo stack.
+5. A timer is initiated simultaneously. When the time is up, Demo Shelf will shut down the stack.
 
-# More screenshots
+## More Screenshots
 
-![image](https://github.com/louislam/demo-kuma/assets/1336778/c264c86a-0718-42af-a91b-20db061af7db)
+![Instructions popup](/static/instructions.png)
 
-## Shoutout
+![Live demo](/static/live%20demo.png)
 
-A big shout out to [@louislam](https://github.com/louislam/) the original creator of [demo-kuma](https://github.com/louislam/demo-kuma) for creating this amazing tool, go give him a ⭐ he deserves it!
+![End Screen](/static/end.png)
