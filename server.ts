@@ -13,7 +13,7 @@ import {
   serverPort,
   sessionTime,
   showEntry,
-  websiteName,
+  appName,
 } from "./config";
 
 // Catch unexpected errors here
@@ -97,7 +97,7 @@ async function requestHandler(
     let indexTemplate = ejs.render(
       await fs.readFile("./views/index.ejs", "utf-8"),
       {
-        websiteName,
+        appName,
         installURL,
         autoStart: !showEntry,
         entryPath,
@@ -111,7 +111,7 @@ async function requestHandler(
       let indexTemplate = ejs.render(
         await fs.readFile("./views/index.ejs", "utf-8"),
         {
-          websiteName,
+          appName,
           installURL,
           autoStart: !showEntry,
           entryPath,

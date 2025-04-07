@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title><%= websiteName %></title>
+    <title><%= appName %> Demo</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="/demo-shelf/main.css" />
@@ -12,11 +12,11 @@
       <div class="main" v-if="!iframeSrc">
         <div class="entry card" v-if="showEntry">
           <div class="bg">
-            <h2 class="heading"><%= websiteName %></h2>
+            <h2 class="heading"><%= appName %> Demo</h2>
 
             <p class="paragraph">
-              This is a demo of <%= websiteName %>. You can use this demo to try
-              out the software before installing it on your own server.
+              This is a demo of <%= appName %>. You can use this demo to try out
+              the software before installing it on your own server.
             </p>
 
             <button class="btn btn-primary btn-big" @click="start">
@@ -27,21 +27,23 @@
 
         <div class="entry card blue-glow" v-if="loading">
           <div class="bg">
-            <p class="paragraph">Preparing your demo, please wait...</p>
+            <p class="paragraph">
+              Preparing your <%= appName %> demo instance, please wait...
+            </p>
           </div>
         </div>
 
         <div class="entry card blue-glow" v-if="showEnd">
           <div class="bg">
-            <h2 class="heading"><%= websiteName %> has Ended</h2>
+            <h2 class="heading">Your <%= appName %> demo has Ended</h2>
 
             <p class="paragraph">
-              <%= websiteName %> has ended, you can start a new demo by
-              refreshing the page. Better still, why not Install it and use it!
+              You can start a new demo by refreshing the page. Better still, why
+              not install it and use it, we have Docker images too 😉!
             </p>
 
             <a href="<%= installURL %>" class="btn eager btn-primary"
-              >Install now</a
+              >Install <%= appName %> now</a
             >
           </div>
         </div>
@@ -52,7 +54,7 @@
           <p>
             <span class="countdown">{{ countdown }}</span>
             <a href="<%= installURL %>" class="install-link" target="_blank"
-              >Install now</a
+              >Install <%= appName %> now</a
             >
           </p>
         </div>
@@ -63,7 +65,7 @@
       <div class="popup-overlay" v-if="showPopup && iframeSrc">
         <div class="entry card blue-glow">
           <div class="bg">
-            <h2 class="heading">How to setup your demo</h2>
+            <h2 class="heading">How to setup your <%= appName %> demo</h2>
 
             <p class="paragraph left">
               Currently, the demo

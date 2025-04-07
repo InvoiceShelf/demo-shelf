@@ -9,7 +9,7 @@ export const entryPath: string =
   process.env.STACK_MAIN_SERVICE_ENTRY_PATH ?? "/";
 export const dockerNetwork: string =
   process.env.DOCKER_NETWORK_NAME ?? "demo-shelf";
-export const websiteName: string = process.env.WEBSITE_NAME ?? "Demo";
+export const appName: string = process.env.APP_NAME ?? "Demo";
 export const sessionTime: number = parseInt(process.env.SESSION_TIME ?? "600");
 export const startTimeout: number = parseInt(process.env.START_TIMEOUT ?? "60");
 export const installURL: string = process.env.INSTALL_URL ?? "";

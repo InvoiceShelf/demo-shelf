@@ -9,7 +9,7 @@ services:
       - ./compose-demo.yaml:/app/compose-demo.yaml
     environment:
       # Demo Website Name
-      - WEBSITE_NAME=InvoiceShelf Demo
+      - APP_NAME=InvoiceShelf
 
       # Stack Prefix (Should a special prefix, because demo-shelf will manage (start/shutdown) all stacks with this)
       - STACK_PREFIX=invoiceshelf-demo
