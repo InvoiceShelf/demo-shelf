@@ -10,8 +10,8 @@
   <body>
     <div id="app" v-cloak>
       <div class="main" v-if="!iframeSrc">
-        <div class="entry card" v-if="showEntry">
-          <div class="bg">
+        <div class="card" v-if="showEntry">
+          <div class="card__inner">
             <h2 class="heading"><%= appName %> Demo</h2>
 
             <p class="paragraph">
@@ -19,22 +19,20 @@
               the software before installing it on your own server.
             </p>
 
-            <button class="btn btn-primary btn-big" @click="start">
-              Start Demo
-            </button>
+            <button class="btn" @click="start">Start Demo</button>
           </div>
         </div>
 
-        <div class="entry card blue-glow" v-if="loading">
-          <div class="bg">
+        <div class="card blue-glow" v-if="loading">
+          <div class="card__inner">
             <p class="paragraph">
               Preparing your <%= appName %> demo instance, please wait...
             </p>
           </div>
         </div>
 
-        <div class="entry card blue-glow" v-if="showEnd">
-          <div class="bg">
+        <div class="card blue-glow" v-if="showEnd">
+          <div class="card__inner">
             <h2 class="heading">Your <%= appName %> demo has Ended</h2>
 
             <p class="paragraph">
@@ -42,7 +40,7 @@
               not install it and use it, we have Docker images too 😉!
             </p>
 
-            <a href="<%= installURL %>" class="btn eager btn-primary"
+            <a href="<%= installURL %>" class="btn eager"
               >Install <%= appName %> now</a
             >
           </div>
@@ -63,8 +61,8 @@
       <iframe :src="iframeSrc" v-if="iframeSrc"></iframe>
 
       <div class="popup-overlay" v-if="showPopup && iframeSrc">
-        <div class="entry card blue-glow">
-          <div class="bg">
+        <div class="card blue-glow">
+          <div class="card__inner">
             <h2 class="heading">How to setup your <%= appName %> demo</h2>
 
             <p class="paragraph left">
@@ -79,17 +77,15 @@
               settings. That's all there is to it!
             </p>
 
-            <p class="paragraph joke left">
+            <p class="paragraph joke left"></p>
+
+            <!-- <blockquote class="paragraph joke right">
               Alright then, upstairs, my little nose miners! Go! Flee before me!
-              Onward and upward. Go pump some neurons! Expand your craniums!<br />
-            </p>
+              Onward and upward. Go pump some neurons! Expand your craniums!
+              <cite>- Euphegenia Doubtfire</cite>
+            </blockquote> -->
 
-            <p class="paragraph joke right">- Euphegenia Doubtfire</p>
-
-            <button
-              class="popup-close btn btn-primary blue"
-              @click="closePopup"
-            >
+            <button class="popup-close btn blue" @click="closePopup">
               Understood
             </button>
           </div>
